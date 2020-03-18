@@ -1,0 +1,20 @@
+version: '3.4'
+
+services: 
+  php:
+    image: php:7.4-fpm
+    volumes: 
+      - ./code:/code
+  web:
+    image: nginx
+    volumes: 
+      - ./code:/code
+      - ./site.conf:/etc/nginx/conf.d/site.conf
+    depends_on: 
+      - php
+  varnish:
+    build: build/varnish
+    depends_on: 
+      - web
+    ports: 
+      - "8080:80"
